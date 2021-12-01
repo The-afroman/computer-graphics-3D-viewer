@@ -1,0 +1,55 @@
+{
+    "camera": {
+        "type": "perspective",
+        "position": [0,0,-6],
+        "lookat": [0,0,0],
+        "up": [0,1,0],
+        "fov": 80
+    },
+    "light": {
+        "type": "point",
+        "position": [0, 5, 0],
+        "color": "#FFFFFF",
+        "ambient": "#888888",
+        "diffuse": "#888888",
+        "specular": "#888888"
+    },
+    "root": {
+        "name": "node0",
+        "type": "node",
+        "translation": [0,0,0],
+        "rotation": [0,0,0],
+        "scale": [1,1,1],
+        "children": [
+            {
+                "name": "node1",
+                "type": "node",
+                "translation": [0,0,0],
+                "rotation": [0,0,0],
+                "scale": [1,1,1],
+                "children": [
+                    {
+                        "name": "sphere-8",
+                        "type": "object",
+                        "obj": "../objects/sphere_8_subdivisions.obj",
+                        "color": "#33F0FF",
+                        "translation": [-1,0,0],
+                        "rotation": [0,0,0],
+                        "scale": [0.8,0.8,0.8],
+                        "children": []
+                    },
+                    {
+                        "name": "sphere-3",
+                        "type": "object",
+                        "obj": "../objects/sphere_3_subdivisions.obj",
+                        "color": "#33F0FF",
+                        "translation": [1,0,0],
+                        "rotation": [0,0,0],
+                        "scale": [0.8,0.8,0.8],
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+}

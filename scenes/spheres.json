@@ -1,0 +1,69 @@
+{
+    "camera": {
+        "type": "perspective",
+        "position": [0.6,0,-3],
+        "lookat": [0,0,0],
+        "up": [0,1,0],
+        "fov": 80
+    },
+    "lights": {
+        "ambient": [0.5,0.5,0.5],
+        "point_lights": [
+            {
+                "type": "point",
+                "position": [0, 2, 0],
+                "Id": [0.2, 0, 0.8],
+                "Is": [1, 1, 1]
+            },
+            {
+                "type": "point",
+                "position": [0, 0.5, -1],
+                "Id": [1, 0.4, 0.1],
+                "Is": [1, 1, 1]
+            }
+        ],
+        "directional_lights": [
+            {
+                "type": "direction",
+                "direction": [0, -2, 0],
+                "Id": [0.9, 0.6, 0.6],
+                "Is": [1, 1, 1]
+            },
+            {
+                "type": "direction",
+                "direction": [0, 2, 0],
+                "Id": [0.9, 0.6, 0.6],
+                "Is": [1, 1, 1]
+            }
+        ]
+    },
+    "root": {
+        "name": "node0",
+        "type": "node",
+        "translation": [0,0,0],
+        "rotation": [0,0,0],
+        "scale": [1,1,1],
+        "children": [
+            {
+                "name": "sphere8",
+                "type": "object",
+                "obj": "../objects/sphere8.obj",
+                "color": "#AAAAAA",
+                "translation": [1,0,0],
+                "rotation": [0,0,0],
+                "scale": [1,1,1],
+                "children": []
+            },
+            {
+                "name": "sphere3",
+                "type": "object",
+                "obj": "../objects/sphere3.obj",
+                "color": "#AAAAAA",
+                "translation": [-1,0,0],
+                "rotation": [0,0,0],
+                "scale": [1,1,1],
+                "children": []
+            }
+        ]
+    }
+}

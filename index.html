@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 2</title>
+    <script type="module" src="js/main.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="header-container">
+            <div class="modes">
+                <h1>Assignment 4&nbsp;&nbsp;&nbsp;&nbsp; </h1>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="container2">
+                    <span>Select Ambient</span><br/>
+                    <input id="ambient" type="color" value="#ffffff">
+                    <span>Select Diffuse</span><br/>
+                    <input id="diffuse" type="color" value="#ffffff">
+                    <span>Select Specular</span><br/>
+                    <input id="specular" type="color" value="#ffffff">
+                </div> 
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="container3">
+                    <div id="active_light">no light selected</div>
+                    <div id="tip">toggle lights with q</div>
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="container2">
+                    <span>Pos or Dir</span><br/>
+                    x:<input type="text" id="pos_x">
+                    y:<input type="text" id="pos_y">
+                    z:<input type="text" id="pos_z">
+                </div>
+            </div> 
+               
+        </div>
+       
+        <div class="settings-container">
+            <div class="modes-container">
+                <h3>Camera Mode</h3>
+                <div class="modes">
+                    <div id="fpsCamMode" class="indicator inactive">FPS</div>
+                    <div id="statCamMode" class="indicator inactive">Stationary</div>
+                </div>
+            </div>
+            <div class="modes-container">
+                <h3>Projection Mode</h3>
+                <div class="modes">
+                    <div id="perspProjMode" class="indicator inactive">[P]erspective</div>
+                    <div id="orthoProjMode" class="indicator inactive">[O]rthographic</div>
+                </div>
+            </div>
+            <div class="modes-container">
+                <!-- do ids stack? -->
+                <h3>Selection</h3>
+                <div class="modes">
+                    <div id="selectionRaycasting" class="indicator inactive">[R]aycast</div>
+                    <div id="selectionTarget" class="indicator inactive">No Target Selected</div>
+                </div>
+            </div>
+            <div class="modes-container">
+                <h3>Shading</h3>
+                <div class="modes">
+                    <div id="wireframeShading" class="indicator inactive">[1] Wireframe</div>
+                    <div id="flatShading" class="indicator inactive">[2] Flat</div>
+                    <div id="phongShading" class="indicator inactive">[3] Phong</div>
+                    <div id="gouraudShading" class="indicator inactive">[4] Gouraud</div>
+                </div>
+            </div>
+            <div class="container">
+                <span>Select Ka</span><br/>
+                <input id="ka" type="color" value="#ffffff">
+                <span>Select Kd</span><br/>
+                <input id="kd" type="color" value="#ffffff">
+                <span>Select Ks</span><br/>
+                <input id="ks" type="color" value="#ffffff">
+            </div>
+            
+        </div>
+
+        <div id="webgl-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+    <noscript>You need to enable JavaScript to view the full site.</noscript>
+    <script src="lib/gl-matrix-min.js"></script>
+    <script type="text/javascript">
+        const {mat2, mat3, mat4, vec2, vec3, vec4, quat} = glMatrix;
+    </script>
+    <script type="module" src="js/main.js"></script>
+
+</body>
+
+</html>
