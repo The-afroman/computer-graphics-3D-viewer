@@ -163,7 +163,7 @@ class AppState
     {
 
         // Shading Input
-        console.log(this.textflag)
+        // console.log(this.textflag)
         if(!this.textflag) {
             if ( Input.isKeyDown( "1" ) ) {
                 this.app.shader = this.app.wireframe_shader

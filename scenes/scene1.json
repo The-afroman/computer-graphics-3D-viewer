@@ -12,13 +12,13 @@
             {
                 "type": "point",
                 "position": [0, 2, 0],
-                "Id": [0.2, 0, 0.8],
+                "Id": [0.5, 0.5, 0.8],
                 "Is": [1, 1, 1]
             },
             {
                 "type": "point",
                 "position": [0, 0.5, -1],
-                "Id": [1, 0.4, 0.1],
+                "Id": [0.3, 0.4, 0.3],
                 "Is": [1, 1, 1]
             }
         ],
@@ -26,7 +26,7 @@
             {
                 "type": "direction",
                 "direction": [0, -2, 0],
-                "Id": [0.9, 0.6, 0.6],
+                "Id": [0.7, 0.6, 0.6],
                 "Is": [1, 1, 1]
             }
         ]
@@ -58,12 +58,13 @@
                     {
                         "name": "cube",
                         "type": "object",
-                        "obj": "../objects/cube.obj",
+                        "obj": "../objects/cube_tex.obj",
                         "color": "#33F0FF",
                         "translation": [-5,-0.2,-1.2],
                         "rotation": [0,0,0],
                         "scale": [0.8,0.8,0.8],
-                        "children": []
+                        "children": [],
+                        "texture": "../pictures/texture.jpeg"
                     },
                     {
                         "name": "pyramid",
@@ -103,7 +104,8 @@
                         "translation": [2,0.2,-3.5],
                         "rotation": [0,-120,0],
                         "scale": [1.5,1.5,1.5],
-                        "children": []
+                        "children": [],
+                        "texture": "../pictures/metal.jpg"
                     },
                     {
                         "name": "monkey",
@@ -113,7 +115,8 @@
                         "translation": [-3,0.5,-3.5],
                         "rotation": [0,120,0],
                         "scale": [1.5,1.5,1.5],
-                        "children": []
+                        "children": [],
+                        "texture": "../pictures/metal.jpg"
                     }
                 ]
             }

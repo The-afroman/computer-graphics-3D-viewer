@@ -12,13 +12,7 @@
             {
                 "type": "point",
                 "position": [0, 2, 0],
-                "Id": [0.2, 0, 0.8],
-                "Is": [1, 1, 1]
-            },
-            {
-                "type": "point",
-                "position": [0, 0.5, -1],
-                "Id": [1, 0.4, 0.1],
+                "Id": [0.2, 0.2, 0.2],
                 "Is": [1, 1, 1]
             }
         ],
@@ -26,13 +20,13 @@
             {
                 "type": "direction",
                 "direction": [0, -2, 0],
-                "Id": [0.9, 0.6, 0.6],
+                "Id": [0.6, 0.6, 0.6],
                 "Is": [1, 1, 1]
             },
             {
                 "type": "direction",
                 "direction": [0, 2, 0],
-                "Id": [0.9, 0.6, 0.6],
+                "Id": [0.8, 0.6, 0.6],
                 "Is": [1, 1, 1]
             }
         ]
@@ -54,11 +48,12 @@
                     {
                         "name": "monkey",
                         "type": "object",
-                        "obj": "../objects/monkey.obj",
+                        "obj": "../objects/cube_tex.obj",
+                        "texture": "../pictures/metal.jpg",
                         "color": "#33F0FF",
-                        "translation": [-1,0,0],
+                        "translation": [0,0,0],
                         "rotation": [0,0,0],
-                        "scale": [0.8,0.8,0.8],
+                        "scale": [1,1,1],
                         "children": []
                     }
                 ]

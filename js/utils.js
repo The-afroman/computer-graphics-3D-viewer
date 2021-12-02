@@ -5,12 +5,15 @@ import ObjectNode from "./object.js"
 import {PerspectiveCamera, OrthographicCamera} from "./camera.js"
 import light from "./light.js"
 
+var numTextures = 0
+
 // Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 function isPowerOf2(value){
     return (value & (value - 1)) == 0;
 }
 
-function loadTexture (gl, image) {
+// Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+function loadTexture(gl, url) {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
   
@@ -26,54 +29,35 @@ function loadTexture (gl, image) {
     const border = 0;
     const srcFormat = gl.RGBA;
     const srcType = gl.UNSIGNED_BYTE;
-    const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+    const pixel = new Uint8Array([255, 0, 0, 255]);  // opaque red
     gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                   width, height, border, srcFormat, srcType,
                   pixel);
   
-    
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-                  srcFormat, srcType, image);
+    const image = new Image();
+    image.onload = function() {
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                    srcFormat, srcType, image);
   
-    // WebGL1 has different requirements for power of 2 images
-    // vs non power of 2 images so check if the image is a
-    // power of 2 in both dimensions.
-    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-      // Yes, it's a power of 2. Generate mips.
-      gl.generateMipmap(gl.TEXTURE_2D);
-    } else {
-      // No, it's not a power of 2. Turn off mips and set
-      // wrapping to clamp to edge
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    }
-  //   const image = new Image();
-  //   image.onload = function() {
-  //     gl.bindTexture(gl.TEXTURE_2D, texture);
-  //     gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-  //                   srcFormat, srcType, image);
+      // WebGL1 has different requirements for power of 2 images
+      // vs non power of 2 images so check if the image is a
+      // power of 2 in both dimensions.
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+         // Yes, it's a power of 2. Generate mips.
+         gl.generateMipmap(gl.TEXTURE_2D);
+      } else {
+         // No, it's not a power of 2. Turn off mips and set
+         // wrapping to clamp to edge
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+    };
+    image.src = url;
   
-  //     // WebGL1 has different requirements for power of 2 images
-  //     // vs non power of 2 images so check if the image is a
-  //     // power of 2 in both dimensions.
-  //     if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-  //        // Yes, it's a power of 2. Generate mips.
-  //        gl.generateMipmap(gl.TEXTURE_2D);
-  //     } else {
-  //        // No, it's not a power of 2. Turn off mips and set
-  //        // wrapping to clamp to edge
-  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  //     }
-  //   };
-  //   image.src = url;
-    
-  //   console.log(image);
-  return texture;
-}  
+    return texture;
+  }
 
 
 /**
@@ -508,8 +492,14 @@ function parseSceneNode( entry, parent )
     let translation = vec3.fromValues( entry.translation[ 0 ], entry.translation[ 1 ], entry.translation[ 2 ] )
     let rotation = vec3.fromValues( entry.rotation[ 0 ], entry.rotation[ 1 ], entry.rotation[ 2 ] )
     let scale = vec3.fromValues( entry.scale[ 0 ], entry.scale[ 1 ], entry.scale[ 2 ] )
+    let texture = entry.texture
+    let texId = numTextures
+    console.log(texture)
     let material = []
-
+    let default_material = [[1.0, 1.0, 1.0],
+                            [0.6, 0.6, 0.6], 
+                            [0.5, 0.5, 0.5], 
+                            16]
     if ( entry.type == 'node' )
     {
         node = new SceneNode( name, parent, translation, rotation, scale )
@@ -521,9 +511,19 @@ function parseSceneNode( entry, parent )
         const fallback_color = hex2rgb( entry.color )
         const obj_content = loadObjFile( entry.obj, fallback_color, material )
         if(material.length < 1){
-            node = new ObjectNode( obj_content, name, parent, translation, rotation, scale )
+            if(texture != undefined) {
+                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material, texture, texId )
+                numTextures++
+            } else {
+                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material )
+            }
         } else {
-            node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material )
+            if(texture != undefined) {
+                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material, texture, texId )
+                numTextures++
+            } else {
+                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material )
+            }
         }
 
     }

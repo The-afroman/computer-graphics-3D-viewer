@@ -9,6 +9,7 @@ uniform vec3 Kd;
 uniform vec3 Ks;
 uniform float Ns;
 uniform int num_lights;
+uniform int has_tex;
 uniform mat4 u_transform;
 uniform sampler2D uSampler;
 
@@ -29,16 +30,21 @@ in vec3 model_pos;
 out vec4 out_color;
 
 void main() {
-    
+    vec3 lightDir;
+    vec3 pos;
+    vec3 texcolor;
+    vec3 res;
     vec3 normal = normalize(vec3(u_modelInverseTranspose*vec4(v_normal,1.0)));
     vec3 cameraDir = normalize(u_cameraPosition - model_pos);
     
 
     vec3 ambient = Ka * Ia;
-    vec3 texcolor = texture(uSampler, vTextureCoord).xyz;
-    vec3 res = ambient * texcolor;
-    vec3 lightDir;
-    vec3 pos;
+    if(has_tex == 1) {
+        texcolor = texture(uSampler, vTextureCoord).xyz;
+        res = ambient * texcolor;
+    } else {
+        res = ambient * v_color;
+    }
     for(int index = 0; index < num_lights; index<index++)
     {
         // point vs directional light
