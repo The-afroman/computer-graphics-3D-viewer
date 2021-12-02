@@ -1,7 +1,7 @@
 {
     "camera": {
         "type": "perspective",
-        "position": [0,0,-6],
+        "position": [0,0,-3],
         "lookat": [0,0,0],
         "up": [0,1,0],
         "fov": 80
@@ -26,7 +26,7 @@
             {
                 "type": "direction",
                 "direction": [0, 2, 0],
-                "Id": [0.8, 0.6, 0.6],
+                "Id": [0.6, 0.55, 0.65],
                 "Is": [1, 1, 1]
             }
         ]
@@ -48,11 +48,22 @@
                     {
                         "name": "monkey",
                         "type": "object",
-                        "obj": "../objects/cube_tex.obj",
-                        "texture": "../pictures/metal.jpg",
+                        "obj": "../objects/monkey.obj",
+                        "texture": "../objects/wood.jpg",
                         "color": "#33F0FF",
-                        "translation": [0,0,0],
-                        "rotation": [0,0,0],
+                        "translation": [-1.5,0,0],
+                        "rotation": [0,180,0],
+                        "scale": [1,1,1],
+                        "children": []
+                    },
+                    {
+                        "name": "monkey2",
+                        "type": "object",
+                        "obj": "../objects/monkey.obj",
+                        "texture": "../objects/fabric.jpg",
+                        "color": "#33F0FF",
+                        "translation": [1.5,0,0],
+                        "rotation": [0,180,0],
                         "scale": [1,1,1],
                         "children": []
                     }

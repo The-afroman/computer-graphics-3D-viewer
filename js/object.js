@@ -62,46 +62,15 @@ class ObjectNode extends SceneNode
         this.vbo = gl.createBuffer( );
         gl.bindBuffer( gl.ARRAY_BUFFER, this.vbo )
         gl.bufferData( gl.ARRAY_BUFFER, this.vbo_data, gl.STATIC_DRAW )
-        // use the texture unit specified by texId
-        switch(this.texId) {
-            case 0:
-                gl.activeTexture(gl.TEXTURE0);
-                break
-            case 1:
-                gl.activeTexture(gl.TEXTURE1);
-                break
-            case 2:
-                gl.activeTexture(gl.TEXTURE2);
-                break
-            case 3:
-                gl.activeTexture(gl.TEXTURE3);
-                break
-            case 4:
-                gl.activeTexture(gl.TEXTURE4);
-                break
-            case 5:
-                gl.activeTexture(gl.TEXTURE5);
-                break
-            case 6:
-                gl.activeTexture(gl.TEXTURE6);
-                break
-            case 7:
-                gl.activeTexture(gl.TEXTURE7);
-                break
-            case 8:
-                gl.activeTexture(gl.TEXTURE8);
-                break
-        }
-        this.loadText( gl )
-        // bind the texture to the texture unit
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
     }
 
     render( gl, shader )
     {
         if ( this.vbo == null )
             this.createBuffers( gl )
-
+        if ( this.texture == null )
+            this.loadText( gl )
+        
         let stride = (3*3 + 2) * 4,
             offset = 0
         let attrib_loc;
@@ -132,7 +101,11 @@ class ObjectNode extends SceneNode
             gl.vertexAttribPointer( shader.getAttributeLocation( "aTextureCoord" ), 2, gl.FLOAT, false, stride, offset )
             gl.enableVertexAttribArray( shader.getAttributeLocation( "aTextureCoord" ) )
         }
-
+        
+        // use the texture unit specified by texId
+        gl.activeTexture(gl.TEXTURE0);
+        // bind the texture to the texture unit
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
         //console.log(this.texture_file)
 
         gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 11 )

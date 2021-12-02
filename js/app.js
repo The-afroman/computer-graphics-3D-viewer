@@ -175,7 +175,7 @@ class App
         this.shader.setUniform1i("num_lights", num_lights)
         this.shader.setUniform3f("Ia", vec3.fromValues(this.ambient_light[0],this.ambient_light[1],this.ambient_light[2]))
         this.shader.setUniform4x4f( "u_transform",this.scene.transform);
-        this.shader.setUniform1i("uSampler", node.texId)
+        this.shader.setUniform1i("uSampler", 0)
         
         if(node.texture_file != null) {
             this.shader.setUniform1i("has_tex",1)
