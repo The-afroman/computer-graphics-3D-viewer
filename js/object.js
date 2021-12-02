@@ -62,7 +62,7 @@ class ObjectNode extends SceneNode
         if ( this.vbo == null )
             this.createBuffers( gl )
 
-        let stride = 3 * 3 * 4,
+        let stride = (3*3 + 2) * 4,
             offset = 0
         let attrib_loc;
         gl.bindBuffer( gl.ARRAY_BUFFER, this.vbo )
@@ -86,7 +86,14 @@ class ObjectNode extends SceneNode
             gl.enableVertexAttribArray( shader.getAttributeLocation( "a_normal" ) )
         }
 
-        gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 9 )
+        offset = 3 * 3 * 4
+        attrib_loc = shader.getAttributeLocation( "aTextureCoord" )
+        if (attrib_loc >= 0) {
+            gl.vertexAttribPointer( shader.getAttributeLocation( "aTextureCoord" ), 2, gl.FLOAT, false, stride, offset )
+            gl.enableVertexAttribArray( shader.getAttributeLocation( "aTextureCoord" ) )
+        }
+
+        gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 11 )
 
     }
 }

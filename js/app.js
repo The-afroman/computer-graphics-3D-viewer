@@ -4,6 +4,7 @@ import Input from "./input.js"
 import AppState from "./appstate.js"
 import Shader from "./shader.js"
 import { OrbitMovement } from "./movement.js"
+import {loadTexture} from "./utils.js"
 
 class App
 {
@@ -52,6 +53,7 @@ class App
 
         // app state
         this.app_state = new AppState( this )
+        this.texture;
     }
 
     /**
@@ -94,12 +96,16 @@ class App
             alert( "Could not initialize WebGL2." )
             return null
         }
-
+        
         gl.enable( gl.CULL_FACE ); // Turn on culling. By default backfacing triangles will be culled.
         gl.enable( gl.DEPTH_TEST ); // Enable the depth buffer
         gl.clearDepth( 1.0 );
         gl.clearColor( 1, 1, 1, 1 );
         gl.depthFunc( gl.LEQUAL ); // Near things obscure far things
+        
+        let image = new Image
+        image.src = "./objects/metal.jpg"
+        this.texture = loadTexture(gl, image)
 
         return gl
     }
@@ -166,6 +172,13 @@ class App
             mat4.create( ),
             this.camera.vp( ),
             node.getTransform( ) )
+
+        // use the texture unit 0
+        this.gl.activeTexture(this.gl.TEXTURE0);
+
+        // bind the texture to the texture unit
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+
         let invTransposeModel = mat4.invert(mat4.create(),mat4.transpose(mat4.create, node.getTransform( )));
         this.shader.setUniform4x4f( "u_model", node.getTransform( ) );
         this.shader.setUniform4x4f( "u_modelInverseTranspose", invTransposeModel );
@@ -173,8 +186,10 @@ class App
         this.shader.setUniform3f("u_cameraPosition", this.camera.position);
         let num_lights = this.lights.length
         this.shader.setUniform1i("num_lights", num_lights)
+        this.shader.setUniform1i("uSampler", 0)
         this.shader.setUniform3f("Ia", vec3.fromValues(this.ambient_light[0],this.ambient_light[1],this.ambient_light[2]))
         this.shader.setUniform4x4f( "u_transform",this.scene.transform);
+
         //console.log(this.ambient_light[0])
         for(let index = 0; index < this.lights.length; index++) {
             this.shader.setUniform3f(`lights[${index}].pos_or_direction`, vec3.fromValues(this.lights[index].position[0],this.lights[index].position[1],this.lights[index].position[2]));

@@ -6,13 +6,36 @@
         "up": [0,1,0],
         "fov": 80
     },
-    "light": {
-        "type": "point",
-        "position": [0, 5, 0],
-        "color": "#FFFFFF",
-        "ambient": "#888888",
-        "diffuse": "#888888",
-        "specular": "#888888"
+    "lights": {
+        "ambient": [0.5,0.5,0.5],
+        "point_lights": [
+            {
+                "type": "point",
+                "position": [0, 2, 0],
+                "Id": [0.2, 0, 0.8],
+                "Is": [1, 1, 1]
+            },
+            {
+                "type": "point",
+                "position": [0, 0.5, -1],
+                "Id": [1, 0.4, 0.1],
+                "Is": [1, 1, 1]
+            }
+        ],
+        "directional_lights": [
+            {
+                "type": "direction",
+                "direction": [0, -2, 0],
+                "Id": [0.9, 0.6, 0.6],
+                "Is": [1, 1, 1]
+            },
+            {
+                "type": "direction",
+                "direction": [0, 2, 0],
+                "Id": [0.9, 0.6, 0.6],
+                "Is": [1, 1, 1]
+            }
+        ]
     },
     "root": {
         "name": "node0",
@@ -29,21 +52,11 @@
                 "scale": [1,1,1],
                 "children": [
                     {
-                        "name": "sphere-8",
+                        "name": "monkey",
                         "type": "object",
-                        "obj": "../objects/sphere_8_subdivisions.obj",
+                        "obj": "../objects/monkey.obj",
                         "color": "#33F0FF",
                         "translation": [-1,0,0],
-                        "rotation": [0,0,0],
-                        "scale": [0.8,0.8,0.8],
-                        "children": []
-                    },
-                    {
-                        "name": "sphere-3",
-                        "type": "object",
-                        "obj": "../objects/sphere_3_subdivisions.obj",
-                        "color": "#33F0FF",
-                        "translation": [1,0,0],
                         "rotation": [0,0,0],
                         "scale": [0.8,0.8,0.8],
                         "children": []

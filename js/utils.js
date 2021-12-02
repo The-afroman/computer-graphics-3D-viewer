@@ -5,6 +5,77 @@ import ObjectNode from "./object.js"
 import {PerspectiveCamera, OrthographicCamera} from "./camera.js"
 import light from "./light.js"
 
+// Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+function isPowerOf2(value){
+    return (value & (value - 1)) == 0;
+}
+
+function loadTexture (gl, image) {
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+  
+    // Because images have to be downloaded over the internet
+    // they might take a moment until they are ready.
+    // Until then put a single pixel in the texture so we can
+    // use it immediately. When the image has finished downloading
+    // we'll update the texture with the contents of the image.
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const width = 1;
+    const height = 1;
+    const border = 0;
+    const srcFormat = gl.RGBA;
+    const srcType = gl.UNSIGNED_BYTE;
+    const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                  width, height, border, srcFormat, srcType,
+                  pixel);
+  
+    
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                  srcFormat, srcType, image);
+  
+    // WebGL1 has different requirements for power of 2 images
+    // vs non power of 2 images so check if the image is a
+    // power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+      // No, it's not a power of 2. Turn off mips and set
+      // wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+  //   const image = new Image();
+  //   image.onload = function() {
+  //     gl.bindTexture(gl.TEXTURE_2D, texture);
+  //     gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+  //                   srcFormat, srcType, image);
+  
+  //     // WebGL1 has different requirements for power of 2 images
+  //     // vs non power of 2 images so check if the image is a
+  //     // power of 2 in both dimensions.
+  //     if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+  //        // Yes, it's a power of 2. Generate mips.
+  //        gl.generateMipmap(gl.TEXTURE_2D);
+  //     } else {
+  //        // No, it's not a power of 2. Turn off mips and set
+  //        // wrapping to clamp to edge
+  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  //        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  //     }
+  //   };
+  //   image.src = url;
+    
+  //   console.log(image);
+  return texture;
+}  
+
+
 /**
  * Clamps a number between two numbers
  * @param { Number } number The number to clamp
@@ -151,7 +222,9 @@ function loadObjFile( url, fallback_color, material )
     let vertices = [ ]
     let colors = [ ]
     let normals = [ ]
+    let texcoords = [ ]
     let vertex_ids = [ ]
+    let texcoord_ids = [ ]
     let normal_ids = [ ]
     let normal_map = new Map()
 
@@ -171,8 +244,12 @@ function loadObjFile( url, fallback_color, material )
             case 'vn':
                 parseObjNormal( line, normals )
                 break
+            case 'vt':
+                // parse texcoords
+                parseTexCoords( line, texcoords )
+                break
             case 'f':
-                parseObjIds( line, vertex_ids, normal_ids, normal_map )
+                parseObjIds( line, vertex_ids, normal_ids, normal_map, texcoord_ids )
                 break
         }
     }
@@ -207,10 +284,12 @@ function loadObjFile( url, fallback_color, material )
     {
 
         const vid = ( vertex_ids[ i ] * 3 )
+        const tid = ( texcoord_ids[ i ] * 2 )
 
         data.push( vertices[ vid ], vertices[ vid + 1 ], vertices[ vid + 2 ] )
         data.push( colors[ vid ], colors[ vid + 1 ], colors[ vid + 2 ] )
         data.push( normals_[ vid ], normals_[ vid + 1 ], normals_[ vid + 2 ] )
+        data.push( texcoords[ tid ], texcoords[ tid + 1 ] )
 
     }
 
@@ -272,13 +351,32 @@ function parseObjNormal( entry, list )
 
 }
 
+
+/**
+ * Parses a given object normal entry line
+ * @param { String } entry A line of an object texcoord entry
+ * @param { Array.<Number> } list The list to write the parsed texcoords to
+ */
+function parseTexCoords( entry, list ) 
+{
+
+    const elements = entry.split( ' ' )
+    if ( elements.length != 3 )
+        alert( "Unknown texcoord entry " + entry )
+
+    list.push( parseFloat( elements[ 1 ] ), parseFloat( elements[ 2 ] ) )
+
+}
+
 /**
  * Parses a given object ids entry line
  * @param { String } entry A line of an object ids entry
  * @param { Array.<Number> } vertex_ids The list of vertex ids to write to
  * @param { Map.<Number> } normal_ids The list normal ids to write to
+ * @param { Map.<Number> } texcoord_ids The list normal ids to write to
+
  */
-function parseObjIds( entry, vertex_ids, normal_ids, normal_map )
+function parseObjIds( entry, vertex_ids, normal_ids, normal_map, texcoord_ids )
 {
 
     const elements = entry.split( ' ' )
@@ -294,6 +392,7 @@ function parseObjIds( entry, vertex_ids, normal_ids, normal_map )
         const subelements = element.split( '/' )
 
         vertex_ids.push( parseInt( subelements[ 0 ] ) - 1 )
+        texcoord_ids.push( parseInt( subelements[ 1 ] ) - 1 )
         normal_ids.push( parseInt( subelements[ 2 ] ) - 1 )
 
         if(normal_map.has(parseInt( subelements[ 0 ] ) - 1)) {
@@ -446,6 +545,7 @@ export
     getRelativeMousePosition,
     loadExternalFile,
     loadObjFile,
-    loadSceneFile
+    loadSceneFile,
+    loadTexture, 
 
 }

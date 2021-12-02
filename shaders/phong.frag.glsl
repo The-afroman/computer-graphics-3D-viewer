@@ -10,6 +10,7 @@ uniform vec3 Ks;
 uniform float Ns;
 uniform int num_lights;
 uniform mat4 u_transform;
+uniform sampler2D uSampler;
 
 struct lightSource
 {
@@ -22,6 +23,7 @@ struct lightSource
 uniform lightSource lights[10];
 in vec3 v_color;
 in vec3 v_normal;
+in highp vec2 vTextureCoord;
 in vec3 model_pos;
 // Final color
 out vec4 out_color;
@@ -33,7 +35,8 @@ void main() {
     
 
     vec3 ambient = Ka * Ia;
-    vec3 res = ambient * v_color;
+    vec3 texcolor = texture(uSampler, vTextureCoord).xyz;
+    vec3 res = ambient * texcolor;
     vec3 lightDir;
     vec3 pos;
     for(int index = 0; index < num_lights; index<index++)
