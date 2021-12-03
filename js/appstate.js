@@ -16,6 +16,7 @@ class AppState
         this.light_index = 0
         this.selected_light = app.lights[0]
         this.ambient_light = app.ambient_light
+        this.move_lights = 0
         // get list of ui indicators
         this.ui_categories = {
 
@@ -229,6 +230,11 @@ class AppState
             this.lpos_pickx.value = this.selected_light.position[0]
             this.lpos_picky.value = this.selected_light.position[1]
             this.lpos_pickz.value = this.selected_light.position[2]
+        }
+
+        if ( Input.isKeyPressed( "l" ) ) {
+            this.move_lights ^= 1
+            this.app.shader.setUniform1i("movelights",this.move_lights)
         }
     }
 

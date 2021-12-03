@@ -10,6 +10,7 @@ uniform vec3 Ks;
 uniform float Ns;
 uniform int num_lights;
 uniform int has_tex;
+uniform int movelights;
 uniform mat4 u_transform;
 uniform sampler2D uSampler;
 
@@ -33,22 +34,21 @@ void main() {
     vec3 lightDir;
     vec3 pos;
     vec3 texcolor;
-    vec3 res;
     vec3 normal = normalize(vec3(u_modelInverseTranspose*vec4(v_normal,1.0)));
     vec3 cameraDir = normalize(u_cameraPosition - model_pos);
-    
 
     vec3 ambient = Ka * Ia;
-    if(has_tex == 1) {
-        texcolor = texture(uSampler, vTextureCoord).xyz;
-        res = ambient * texcolor;
-    } else {
-        res = ambient * v_color;
-    }
+    vec3 res = ambient;
+    
     for(int index = 0; index < num_lights; index<index++)
     {
         // point vs directional light
-        pos = vec3(u_transform * vec4(lights[index].pos_or_direction,1));
+        vec3 pos;
+        if(movelights == 1) {
+            pos = vec3(u_transform * vec4(lights[index].pos_or_direction,1));
+        } else {
+            pos = lights[index].pos_or_direction;
+        }
         if(lights[index].type == 1) {
             lightDir = normalize(pos - model_pos);
         } else {
@@ -61,6 +61,12 @@ void main() {
         vec3 specular = Ks * specular_ * lights[index].Is;
 
         res = res + diffuse + specular;
+    }
+    if(has_tex == 1) {
+        texcolor = texture(uSampler, vTextureCoord).xyz;
+        res = res * texcolor;
+    } else {
+        res = res * v_color;
     }
 
     out_color = vec4(res, 1.0);

@@ -3,6 +3,7 @@
 in vec3 a_position;
 in vec3 a_color;
 in vec3 a_normal;
+in vec2 aTextureCoord;
 
 uniform mat4 u_mvp_matrix;
 uniform mat4 u_model;
@@ -10,6 +11,7 @@ uniform mat4 u_modelInverseTranspose;
 uniform vec3 u_lightPosition;
 uniform vec3 u_cameraPosition;
 uniform int num_lights;
+uniform int movelights;
 uniform vec3 Ia;
 uniform mat4 u_transform;
 
@@ -28,9 +30,15 @@ uniform vec3 Ks;
 uniform float Ns;
 
 out vec3 v_color;
+out vec3 lighting;
+out highp vec2 vTextureCoord;
+out vec3 ambient_out;
 
 void main() {
-
+    vec3 res;
+    vec3 lightDir;
+    vec3 texcolor;
+    vTextureCoord = aTextureCoord;
     // Multiply the position by the matrix.
     vec3 model_pos = vec3(u_model*vec4(a_position, 1.0));
     gl_Position = u_mvp_matrix * vec4(a_position, 1.0);
@@ -39,12 +47,16 @@ void main() {
     vec3 cameraDir = normalize(u_cameraPosition - model_pos);
 
     vec3 ambient = Ka * Ia;
-    vec3 res = ambient * a_color;
-    vec3 lightDir;
+
     for(int index = 0; index < num_lights; index<index++)
     {
          // point vs directional light
-        vec3 pos = vec3(u_transform * vec4(lights[index].pos_or_direction,1));
+        vec3 pos;
+        if(movelights == 1) {
+            pos = vec3(u_transform * vec4(lights[index].pos_or_direction,1));
+        } else {
+            pos = lights[index].pos_or_direction;
+        }
         if(lights[index].type == 1) {
             lightDir = normalize(pos - model_pos);
         } else {
@@ -58,5 +70,7 @@ void main() {
 
         res = res + diffuse + specular;
     }
-    v_color = res;
+    lighting = res;
+    v_color = a_color;
+    ambient_out = ambient;
 }

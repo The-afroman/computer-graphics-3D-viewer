@@ -7,12 +7,12 @@
         "fov": 80
     },
     "lights": {
-        "ambient": [0.5,0.5,0.5],
+        "ambient": [0.6,0.6,0.6],
         "point_lights": [
             {
                 "type": "point",
-                "position": [0, 2, 0],
-                "Id": [0.2, 0.2, 0.2],
+                "position": [0, -2, -2],
+                "Id": [0.7, 0.7, 0.7],
                 "Is": [1, 1, 1]
             }
         ],
@@ -26,7 +26,7 @@
             {
                 "type": "direction",
                 "direction": [0, 2, 0],
-                "Id": [0.6, 0.55, 0.65],
+                "Id": [0.6, 0.5, 0.65],
                 "Is": [1, 1, 1]
             }
         ]
@@ -48,7 +48,7 @@
                     {
                         "name": "monkey",
                         "type": "object",
-                        "obj": "../objects/monkey.obj",
+                        "obj": "../objects/monkey_hp.obj",
                         "texture": "../objects/wood.jpg",
                         "color": "#33F0FF",
                         "translation": [-1.5,0,0],
@@ -64,6 +64,17 @@
                         "color": "#33F0FF",
                         "translation": [1.5,0,0],
                         "rotation": [0,180,0],
+                        "scale": [1,1,1],
+                        "children": []
+                    },
+                    {
+                        "name": "cube",
+                        "type": "object",
+                        "obj": "../objects/cube_tex.obj",
+                        "texture": "../objects/texture.jpeg",
+                        "color": "#33F0FF",
+                        "translation": [0,-2,0],
+                        "rotation": [0,0,0],
                         "scale": [1,1,1],
                         "children": []
                     }

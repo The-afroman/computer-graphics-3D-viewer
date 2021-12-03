@@ -7,6 +7,66 @@ import light from "./light.js"
 
 var numTextures = 0
 
+// function borrowed from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
+function calculateTangentSpace(vertices, uvs)
+{
+
+    let tangents = []
+    let bitangents = []
+    
+    for (let i = 0; i < vertices.length/3; i += 3) {
+      let idxv = i*3
+      let idxuv = i*2
+      
+      let v0 = vec3.fromValues(vertices[idxv], vertices[idxv+1], vertices[idxv+2])
+      let v1 = vec3.fromValues(vertices[idxv+3], vertices[idxv+4], vertices[idxv+5])
+      let v2 = vec3.fromValues(vertices[idxv+6], vertices[idxv+7], vertices[idxv+8])
+      //console.log("V", v0, v1, v2)
+  
+      let uv0 = vec2.fromValues(uvs[idxuv], uvs[idxuv+1])
+      let uv1 = vec2.fromValues(uvs[idxuv+2], uvs[idxuv+3])
+      let uv2 = vec2.fromValues(uvs[idxuv+4], uvs[idxuv+5])
+      //console.log("UV", uv0, uv1, uv2)
+  
+      let dv1 = vec3.sub(vec3.create(), v1, v0);
+      let dv2 = vec3.sub(vec3.create(), v2, v0);
+      //console.log("DV", dv1, dv2)
+  
+      let duv1 = vec2.sub(vec3.create(), uv1, uv0);
+      let duv2 = vec2.sub(vec3.create(), uv2, uv0);
+      //console.log("DUV", duv1, duv2)
+  
+      let r = 1.0 / (duv1[0] * duv2[1] - duv1[1] * duv2[0])
+      //console.log("R", r)
+      let tangent = vec3.scale(vec3.create(), 
+                                    vec3.sub(vec3.create(), 
+                                       vec3.scale(vec3.create(), dv1, duv2[1]),
+                                       vec3.scale(vec3.create(), dv2, duv1[1]), 
+                                    ), r)
+      //console.log("TAN", tangent)
+      
+      let bitangent = vec3.scale(vec3.create(), 
+                                    vec3.sub(vec3.create(), 
+                                       vec3.scale(vec3.create(), dv2, duv1[0]),
+                                       vec3.scale(vec3.create(), dv1, duv2[0]), 
+                                    ), r)
+  
+      //console.log("BITAN", bitangent)
+  
+      for (let j = 0; j < 3; j++) {
+        tangents.push(tangent[0])
+        tangents.push(tangent[1])
+        tangents.push(tangent[2])
+        bitangents.push(bitangent[0])
+        bitangents.push(bitangent[1])
+        bitangents.push(bitangent[2])
+      }
+    }
+  
+    return [tangents, bitangents]
+  }
+
+
 // Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 function isPowerOf2(value){
     return (value & (value - 1)) == 0;
@@ -546,6 +606,7 @@ export
     loadExternalFile,
     loadObjFile,
     loadSceneFile,
-    loadTexture, 
+    loadTexture,
+    calculateTangentSpace
 
 }

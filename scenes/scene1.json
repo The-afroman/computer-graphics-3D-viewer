@@ -63,7 +63,8 @@
                         "translation": [-5,-0.2,-1.2],
                         "rotation": [0,0,0],
                         "scale": [0.8,0.8,0.8],
-                        "children": []
+                        "children": [],
+                        "texture": "../objects/texture.jpeg"
                     },
                     {
                         "name": "pyramid",
@@ -104,7 +105,7 @@
                         "rotation": [0,-120,0],
                         "scale": [1.5,1.5,1.5],
                         "children": [],
-                        "texture": "../pictures/metal.jpg"
+                        "texture": "../objects/wood.jpg"
                     },
                     {
                         "name": "monkey",
@@ -115,7 +116,7 @@
                         "rotation": [0,120,0],
                         "scale": [1.5,1.5,1.5],
                         "children": [],
-                        "texture": "../pictures/metal.jpg"
+                        "texture": "../objects/fabric.jpg"
                     }
                 ]
             }
