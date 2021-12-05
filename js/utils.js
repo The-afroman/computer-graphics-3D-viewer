@@ -437,7 +437,7 @@ function parseTexCoords( entry, list )
     if ( elements.length != 3 )
         alert( "Unknown texcoord entry " + entry )
 
-    list.push( parseFloat( elements[ 1 ] ), parseFloat( elements[ 2 ] ) )
+    list.push( parseFloat( elements[ 1 ] ), 1.0-parseFloat( elements[ 2 ] ) )
 
 }
 
