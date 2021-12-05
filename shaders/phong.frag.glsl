@@ -41,7 +41,7 @@ void main() {
     vec3 normal;
     if(has_norm == 1) {
         normal = texture(uNormalMap, vTextureCoord).xyz;
-        normal = normal * 2.0 - 1.0;
+        normal = (normal * 2.0) - 1.0;
         normal = normalize(vTBN * normal);
         // normal = -normal;
         // normal = normalize(vec3(u_modelInverseTranspose*vec4(normal,1.0)));
