@@ -71,11 +71,14 @@ class ObjectNode extends SceneNode
     {
         if ( this.vbo == null )
             this.createBuffers( gl )
+        
         if ( this.texture == null )
             this.loadText( gl )
+        
         if ( this.normal_map == null )
             this.loadNorm( gl )
         
+        // let stride = (3*3 + 2 + 6) * 4,
         let stride = (3*3 + 2 + 6) * 4,
         offset = 0
         let attrib_loc;
@@ -129,7 +132,7 @@ class ObjectNode extends SceneNode
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
 
-        gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 11 )
+        gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 17 )
 
     }
 }
