@@ -7,83 +7,6 @@ import light from "./light.js"
 
 var numTextures = 0
 
-// function borrowed from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
-function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
-{
-
-    let tangents = new Array(vertices.length)
-    let bitangents = new Array(vertices.length)
-    
-    for (let i = 0; i < vertex_ids.length; i+=3) {
-        const vid = ( vertex_ids[ i ] * 3 )
-        const vid1 = ( vertex_ids[ i+1 ] * 3 )
-        const vid2 = ( vertex_ids[ i+2 ] * 3 )
-        const tid = ( tex_ids[ i ] * 2 )
-        const tid1 = ( tex_ids[ i+1 ] * 2 )
-        const tid2 = ( tex_ids[ i+2 ] * 2 )
-        // let idxv = i*3
-        // let idxuv = i*2
-        
-        let v0 = vec3.fromValues(vertices[vid], vertices[vid+1], vertices[vid+2])
-        let v1 = vec3.fromValues(vertices[vid1], vertices[vid1+1], vertices[vid1+2])
-        let v2 = vec3.fromValues(vertices[vid2], vertices[vid2+1], vertices[vid2+2])
-        //console.log("V", v0, v1, v2)
-
-        let uv0 = vec2.fromValues(uvs[tid], uvs[tid+1])
-        let uv1 = vec2.fromValues(uvs[tid1], uvs[tid1+1])
-        let uv2 = vec2.fromValues(uvs[tid2], uvs[tid2+1])
-        //console.log("UV", uv0, uv1, uv2)
-
-        let dv1 = vec3.sub(vec3.create(), v1, v0);
-        let dv2 = vec3.sub(vec3.create(), v2, v0);
-        //console.log("DV", dv1, dv2)
-
-        let duv1 = vec2.sub(vec3.create(), uv1, uv0);
-        let duv2 = vec2.sub(vec3.create(), uv2, uv0);
-        //console.log("DUV", duv1, duv2)
-
-        let r = 1.0 / (duv1[0] * duv2[1] - duv1[1] * duv2[0])
-        //console.log("R", r)
-        let tangent = vec3.scale(vec3.create(), 
-                                    vec3.sub(vec3.create(), 
-                                        vec3.scale(vec3.create(), dv1, duv2[1]),
-                                        vec3.scale(vec3.create(), dv2, duv1[1]), 
-                                    ), r)
-        //console.log("TAN", tangent)
-        
-        let bitangent = vec3.scale(vec3.create(), 
-                                    vec3.sub(vec3.create(), 
-                                        vec3.scale(vec3.create(), dv2, duv1[0]),
-                                        vec3.scale(vec3.create(), dv1, duv2[0]), 
-                                    ), r)
-
-        //console.log("BITAN", bitangent)
-        tangents[vid] = tangent[0]
-        tangents[vid+1] = tangent[1]
-        tangents[vid+2] = tangent[2]
-        bitangents[vid] = bitangent[0]
-        bitangents[vid+1] = bitangent[1]
-        bitangents[vid+2] = bitangent[2]
-
-        tangents[vid1] = tangent[0]
-        tangents[vid1+1] = tangent[1]
-        tangents[vid1+2] = tangent[2]
-        bitangents[vid1] = bitangent[0]
-        bitangents[vid1+1] = bitangent[1]
-        bitangents[vid1+2] = bitangent[2]
-
-        tangents[vid2] = tangent[0]
-        tangents[vid2+1] = tangent[1]
-        tangents[vid2+2] = tangent[2]
-        bitangents[vid2] = bitangent[0]
-        bitangents[vid2+1] = bitangent[1]
-        bitangents[vid2+2] = bitangent[2]
-    }
-  
-    return [tangents, bitangents]
-  }
-
-
 // Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 function isPowerOf2(value){
     return (value & (value - 1)) == 0;
@@ -268,6 +191,90 @@ function parseMTL( entry, material ) {
     material.push(Ka, Kd, Ks, Ns)
     console.log(material)
 }
+
+// function borrowed from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
+function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
+{
+
+    let tangents = []
+    let bitangents = []
+    
+    for (let i = 0; i < vertex_ids.length/3; i+=3) {
+        const vid = ( vertex_ids[ i ] * 3 )
+        const vid1 = ( vertex_ids[ i+1 ] * 3 )
+        const vid2 = ( vertex_ids[ i+2 ] * 3 )
+        const tid = ( tex_ids[ i ] * 2 )
+        const tid1 = ( tex_ids[ i+1 ] * 2 )
+        const tid2 = ( tex_ids[ i+2 ] * 2 )
+        // let idxv = i*3
+        // let idxuv = i*2
+        
+        let v0 = vec3.fromValues(vertices[vid], vertices[vid+1], vertices[vid+2])
+        let v1 = vec3.fromValues(vertices[vid1], vertices[vid1+1], vertices[vid1+2])
+        let v2 = vec3.fromValues(vertices[vid2], vertices[vid2+1], vertices[vid2+2])
+        //console.log("V", v0, v1, v2)
+
+        let uv0 = vec2.fromValues(uvs[tid], uvs[tid+1])
+        let uv1 = vec2.fromValues(uvs[tid1], uvs[tid1+1])
+        let uv2 = vec2.fromValues(uvs[tid2], uvs[tid2+1])
+        //console.log("UV", uv0, uv1, uv2)
+
+        let dv1 = vec3.sub(vec3.create(), v1, v0);
+        let dv2 = vec3.sub(vec3.create(), v2, v0);
+        //console.log("DV", dv1, dv2)
+
+        let duv1 = vec2.sub(vec3.create(), uv1, uv0);
+        let duv2 = vec2.sub(vec3.create(), uv2, uv0);
+        //console.log("DUV", duv1, duv2)
+
+        let r = 1.0 / (duv1[0] * duv2[1] - duv1[1] * duv2[0])
+        //console.log("R", r)
+        let tangent = vec3.scale(vec3.create(), 
+                                    vec3.sub(vec3.create(), 
+                                        vec3.scale(vec3.create(), dv1, duv2[1]),
+                                        vec3.scale(vec3.create(), dv2, duv1[1]), 
+                                    ), r)
+        //console.log("TAN", tangent)
+        
+        let bitangent = vec3.scale(vec3.create(), 
+                                    vec3.sub(vec3.create(), 
+                                        vec3.scale(vec3.create(), dv2, duv1[0]),
+                                        vec3.scale(vec3.create(), dv1, duv2[0]), 
+                                    ), r)
+
+        //console.log("BITAN", bitangent)
+        for (let j = 0; j < 3; j++) {
+            tangents.push(tangent[0])
+            tangents.push(tangent[1])
+            tangents.push(tangent[2])
+            bitangents.push(bitangent[0])
+            bitangents.push(bitangent[1])
+            bitangents.push(bitangent[2])
+        }
+        // tangents[vid] = tangent[0]
+        // tangents[vid+1] = tangent[1]
+        // tangents[vid+2] = tangent[2]
+        // bitangents[vid] = bitangent[0]
+        // bitangents[vid+1] = bitangent[1]
+        // bitangents[vid+2] = bitangent[2]
+
+        // tangents[vid1] = tangent[0]
+        // tangents[vid1+1] = tangent[1]
+        // tangents[vid1+2] = tangent[2]
+        // bitangents[vid1] = bitangent[0]
+        // bitangents[vid1+1] = bitangent[1]
+        // bitangents[vid1+2] = bitangent[2]
+
+        // tangents[vid2] = tangent[0]
+        // tangents[vid2+1] = tangent[1]
+        // tangents[vid2+2] = tangent[2]
+        // bitangents[vid2] = bitangent[0]
+        // bitangents[vid2+1] = bitangent[1]
+        // bitangents[vid2+2] = bitangent[2]
+    }
+  
+    return [tangents, bitangents]
+  }
 
 /**
  * Loads a given .obj file and builds an object from it with vertices, colors and normals

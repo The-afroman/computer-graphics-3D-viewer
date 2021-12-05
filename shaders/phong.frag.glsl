@@ -15,7 +15,7 @@ uniform int movelights;
 uniform mat4 u_transform;
 
 uniform sampler2D uTexture;
-uniform sampler2D uNormalMap;
+uniform sampler2D uNormal;
 
 struct lightSource
 {
@@ -40,7 +40,7 @@ void main() {
     vec3 texcolor;
     vec3 normal;
     if(has_norm == 1) {
-        normal = texture(uNormalMap, vTextureCoord).xyz;
+        normal = texture(uNormal, vTextureCoord).rgb;
         normal = (normal * 2.0) - 1.0;
         normal = normalize(vTBN * normal);
         // normal = -normal;
