@@ -64,7 +64,8 @@
                         "rotation": [0,0,0],
                         "scale": [0.8,0.8,0.8],
                         "children": [],
-                        "texture": "../objects/texture.jpeg"
+                        "texture": "../objects/concrete.jpg",
+                        "normal_map": "../objects/concrete_normal.jpg"
                     },
                     {
                         "name": "pyramid",
@@ -110,13 +111,14 @@
                     {
                         "name": "monkey",
                         "type": "object",
-                        "obj": "../objects/monkey.obj",
+                        "obj": "../objects/monkey_hp.obj",
                         "color": "#1ea896",
                         "translation": [-3,0.5,-3.5],
                         "rotation": [0,120,0],
                         "scale": [1.5,1.5,1.5],
                         "children": [],
-                        "texture": "../objects/fabric.jpg"
+                        "texture": "../objects/concrete.jpg",
+                        "normal_map": "../objects/concrete_normal.jpg"
                     }
                 ]
             }

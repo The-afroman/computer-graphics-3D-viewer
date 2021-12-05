@@ -6,12 +6,8 @@ import {loadTexture} from "./utils.js"
 class ObjectNode extends SceneNode
 {
 
-    constructor( vbo_data, name, parent, translation = vec3.create( ), rotation = vec3.create( ), scale = vec3.fromValues( 1, 1, 1 ), materials = [[1.0, 1.0, 1.0],
-        [0.6, 0.6, 0.6], 
-        [0.5, 0.5, 0.5], 
-        32], texture = null, texId=0)
+    constructor( vbo_data, name, parent, translation = vec3.create( ), rotation = vec3.create( ), scale = vec3.fromValues( 1, 1, 1 ), materials = [[1.0, 1.0, 1.0],[0.6, 0.6, 0.6],[0.5, 0.5, 0.5],32], texture = null, normal = null)
     {
-
         super( name, parent, translation, rotation, scale )
 
         this.type = "object"
@@ -23,7 +19,8 @@ class ObjectNode extends SceneNode
         this.Ns = parseFloat(materials[3])
         this.texture_file = texture
         this.texture = null
-        this.texId = texId
+        this.normal_file = normal
+        this.normal_map = null
     }
 
     update( )
@@ -57,6 +54,12 @@ class ObjectNode extends SceneNode
             this.texture = loadTexture(gl, this.texture_file)
     }
 
+    loadNorm( gl )
+    {
+        if(this.normal_file != null)
+            this.normal_map = loadTexture(gl, this.normal_file)
+    }
+
     createBuffers( gl )
     {
         this.vbo = gl.createBuffer( );
@@ -70,9 +73,11 @@ class ObjectNode extends SceneNode
             this.createBuffers( gl )
         if ( this.texture == null )
             this.loadText( gl )
+        if ( this.normal_map == null )
+            this.loadNorm( gl )
         
-        let stride = (3*3 + 2) * 4,
-            offset = 0
+        let stride = (3*3 + 2 + 6) * 4,
+        offset = 0
         let attrib_loc;
         gl.bindBuffer( gl.ARRAY_BUFFER, this.vbo )
         attrib_loc = shader.getAttributeLocation( "a_position" )
@@ -101,12 +106,28 @@ class ObjectNode extends SceneNode
             gl.vertexAttribPointer( shader.getAttributeLocation( "aTextureCoord" ), 2, gl.FLOAT, false, stride, offset )
             gl.enableVertexAttribArray( shader.getAttributeLocation( "aTextureCoord" ) )
         }
+
+        offset = (9 + 2) * 4
+        attrib_loc = shader.getAttributeLocation( "aVertexTangent" )
+        if (attrib_loc >= 0) {
+            gl.vertexAttribPointer( shader.getAttributeLocation( "aVertexTangent" ), 3, gl.FLOAT, false, stride, offset )
+            gl.enableVertexAttribArray( shader.getAttributeLocation( "aVertexTangent" ) )
+        }
+
+        offset = (9 + 2 + 3) * 4
+        attrib_loc = shader.getAttributeLocation( "aVertexBiTangent" )
+        if (attrib_loc >= 0) {
+            gl.vertexAttribPointer( shader.getAttributeLocation( "aVertexBiTangent" ), 3, gl.FLOAT, false, stride, offset )
+            gl.enableVertexAttribArray( shader.getAttributeLocation( "aVertexBiTangent" ) )
+        }
         
         // use the texture unit specified by texId
         gl.activeTexture(gl.TEXTURE0);
         // bind the texture to the texture unit
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         //console.log(this.texture_file)
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
 
         gl.drawArrays( gl.TRIANGLES, 0, this.vbo_data.length / 11 )
 

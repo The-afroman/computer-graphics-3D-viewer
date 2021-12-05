@@ -8,59 +8,78 @@ import light from "./light.js"
 var numTextures = 0
 
 // function borrowed from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
-function calculateTangentSpace(vertices, uvs)
+function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
 {
 
     let tangents = []
     let bitangents = []
     
-    for (let i = 0; i < vertices.length/3; i += 3) {
-      let idxv = i*3
-      let idxuv = i*2
-      
-      let v0 = vec3.fromValues(vertices[idxv], vertices[idxv+1], vertices[idxv+2])
-      let v1 = vec3.fromValues(vertices[idxv+3], vertices[idxv+4], vertices[idxv+5])
-      let v2 = vec3.fromValues(vertices[idxv+6], vertices[idxv+7], vertices[idxv+8])
-      //console.log("V", v0, v1, v2)
-  
-      let uv0 = vec2.fromValues(uvs[idxuv], uvs[idxuv+1])
-      let uv1 = vec2.fromValues(uvs[idxuv+2], uvs[idxuv+3])
-      let uv2 = vec2.fromValues(uvs[idxuv+4], uvs[idxuv+5])
-      //console.log("UV", uv0, uv1, uv2)
-  
-      let dv1 = vec3.sub(vec3.create(), v1, v0);
-      let dv2 = vec3.sub(vec3.create(), v2, v0);
-      //console.log("DV", dv1, dv2)
-  
-      let duv1 = vec2.sub(vec3.create(), uv1, uv0);
-      let duv2 = vec2.sub(vec3.create(), uv2, uv0);
-      //console.log("DUV", duv1, duv2)
-  
-      let r = 1.0 / (duv1[0] * duv2[1] - duv1[1] * duv2[0])
-      //console.log("R", r)
-      let tangent = vec3.scale(vec3.create(), 
+    for (let i = 0; i < vertex_ids.length/3; i+=3) {
+        const vid = ( vertex_ids[ i ] * 3 )
+        const vid1 = ( vertex_ids[ i+1 ] * 3 )
+        const vid2 = ( vertex_ids[ i+2 ] * 3 )
+        const tid = ( tex_ids[ i ] * 2 )
+        const tid1 = ( tex_ids[ i+1 ] * 2 )
+        const tid2 = ( tex_ids[ i+2 ] * 2 )
+        // let idxv = i*3
+        // let idxuv = i*2
+        
+        let v0 = vec3.fromValues(vertices[vid], vertices[vid+1], vertices[vid+2])
+        // let v1 = vec3.fromValues(vertices[vid+3], vertices[vid+4], vertices[vid+5])
+        // let v2 = vec3.fromValues(vertices[vid+6], vertices[vid+7], vertices[vid+8])
+        let v1 = vec3.fromValues(vertices[vid1], vertices[vid1+1], vertices[vid1+2])
+        let v2 = vec3.fromValues(vertices[vid2], vertices[vid2+1], vertices[vid2+2])
+        //console.log("V", v0, v1, v2)
+
+        let uv0 = vec2.fromValues(uvs[tid], uvs[tid+1])
+        // let uv1 = vec2.fromValues(uvs[tid+2], uvs[tid+3])
+        // let uv2 = vec2.fromValues(uvs[tid+4], uvs[tid+5])
+        let uv1 = vec2.fromValues(uvs[tid1], uvs[tid1+1])
+        let uv2 = vec2.fromValues(uvs[tid2], uvs[tid2+1])
+        //console.log("UV", uv0, uv1, uv2)
+
+        let dv1 = vec3.sub(vec3.create(), v1, v0);
+        let dv2 = vec3.sub(vec3.create(), v2, v0);
+        //console.log("DV", dv1, dv2)
+
+        let duv1 = vec2.sub(vec3.create(), uv1, uv0);
+        let duv2 = vec2.sub(vec3.create(), uv2, uv0);
+        //console.log("DUV", duv1, duv2)
+
+        let r = 1.0 / (duv1[0] * duv2[1] - duv1[1] * duv2[0])
+        //console.log("R", r)
+        let tangent = vec3.scale(vec3.create(), 
                                     vec3.sub(vec3.create(), 
-                                       vec3.scale(vec3.create(), dv1, duv2[1]),
-                                       vec3.scale(vec3.create(), dv2, duv1[1]), 
+                                        vec3.scale(vec3.create(), dv1, duv2[1]),
+                                        vec3.scale(vec3.create(), dv2, duv1[1]), 
                                     ), r)
-      //console.log("TAN", tangent)
-      
-      let bitangent = vec3.scale(vec3.create(), 
+        //console.log("TAN", tangent)
+        
+        let bitangent = vec3.scale(vec3.create(), 
                                     vec3.sub(vec3.create(), 
-                                       vec3.scale(vec3.create(), dv2, duv1[0]),
-                                       vec3.scale(vec3.create(), dv1, duv2[0]), 
+                                        vec3.scale(vec3.create(), dv2, duv1[0]),
+                                        vec3.scale(vec3.create(), dv1, duv2[0]), 
                                     ), r)
-  
-      //console.log("BITAN", bitangent)
-  
-      for (let j = 0; j < 3; j++) {
-        tangents.push(tangent[0])
-        tangents.push(tangent[1])
-        tangents.push(tangent[2])
-        bitangents.push(bitangent[0])
-        bitangents.push(bitangent[1])
-        bitangents.push(bitangent[2])
-      }
+
+        //console.log("BITAN", bitangent)
+        tangents[vid] = tangent[0]
+        tangents[vid+1] = tangent[1]
+        tangents[vid+2] = tangent[2]
+        bitangents[vid] = bitangent[0]
+        bitangents[vid+1] = bitangent[1]
+        bitangents[vid+2] = bitangent[2]
+        tangents[vid1] = tangent[0]
+        tangents[vid1+1] = tangent[1]
+        tangents[vid1+2] = tangent[2]
+        bitangents[vid1] = bitangent[0]
+        bitangents[vid1+1] = bitangent[1]
+        bitangents[vid1+2] = bitangent[2]
+        tangents[vid2] = tangent[0]
+        tangents[vid2+1] = tangent[1]
+        tangents[vid2+2] = tangent[2]
+        bitangents[vid2] = bitangent[0]
+        bitangents[vid2+1] = bitangent[1]
+        bitangents[vid2+2] = bitangent[2]
     }
   
     return [tangents, bitangents]
@@ -109,8 +128,8 @@ function loadTexture(gl, url) {
       } else {
          // No, it's not a power of 2. Turn off mips and set
          // wrapping to clamp to edge
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       }
     };
@@ -297,6 +316,7 @@ function loadObjFile( url, fallback_color, material )
                 break
         }
     }
+    let [tangents, bitangents] = calculateTangentSpace(vertices, texcoords, vertex_ids, texcoord_ids)
     let normals_ = new Array(vertices.length)
     // find average normals per vertex
     function averageNormals(value, key, map) {
@@ -322,18 +342,22 @@ function loadObjFile( url, fallback_color, material )
 
     // find average normals of all verticies
     normal_map.forEach(averageNormals)
-
+    console.log(tangents,bitangents,vertices)
     let data = [ ]
     for ( let i = 0; i < vertex_ids.length; i++ )
     {
 
         const vid = ( vertex_ids[ i ] * 3 )
+        const nid = ( normal_ids[ i ] * 3 )
         const tid = ( texcoord_ids[ i ] * 2 )
 
         data.push( vertices[ vid ], vertices[ vid + 1 ], vertices[ vid + 2 ] )
         data.push( colors[ vid ], colors[ vid + 1 ], colors[ vid + 2 ] )
         data.push( normals_[ vid ], normals_[ vid + 1 ], normals_[ vid + 2 ] )
+        // data.push( normals[ nid ], normals[ nid + 1 ], normals[ nid + 2 ] )
         data.push( texcoords[ tid ], texcoords[ tid + 1 ] )
+        data.push( tangents[ vid ], tangents[ vid + 1 ], tangents[ vid + 2 ] )
+        data.push( bitangents[ vid ], bitangents[ vid + 1 ], bitangents[ vid + 2 ] )
 
     }
 
@@ -553,8 +577,8 @@ function parseSceneNode( entry, parent )
     let rotation = vec3.fromValues( entry.rotation[ 0 ], entry.rotation[ 1 ], entry.rotation[ 2 ] )
     let scale = vec3.fromValues( entry.scale[ 0 ], entry.scale[ 1 ], entry.scale[ 2 ] )
     let texture = entry.texture
-    let texId = numTextures
-    console.log(texture)
+    let normal_map = entry.normal_map
+    console.log(texture, normal_map)
     let material = []
     let default_material = [[1.0, 1.0, 1.0],
                             [0.6, 0.6, 0.6], 
@@ -572,15 +596,21 @@ function parseSceneNode( entry, parent )
         const obj_content = loadObjFile( entry.obj, fallback_color, material )
         if(material.length < 1){
             if(texture != undefined) {
-                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material, texture, texId )
-                numTextures++
+                if(normal_map != undefined) {
+                    node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material, texture, normal_map )
+                } else {
+                    node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material, texture )
+                }
             } else {
                 node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, default_material )
             }
         } else {
             if(texture != undefined) {
-                node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material, texture, texId )
-                numTextures++
+                if(normal_map != undefined) {
+                    node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material, texture, normal_map )
+                } else {
+                    node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material, texture )
+                }
             } else {
                 node = new ObjectNode( obj_content, name, parent, translation, rotation, scale, material )
             }

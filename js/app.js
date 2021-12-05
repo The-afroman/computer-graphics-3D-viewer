@@ -175,12 +175,19 @@ class App
         this.shader.setUniform1i("num_lights", num_lights)
         this.shader.setUniform3f("Ia", vec3.fromValues(this.ambient_light[0],this.ambient_light[1],this.ambient_light[2]))
         this.shader.setUniform4x4f( "u_transform",this.scene.transform);
-        this.shader.setUniform1i("uSampler", 0)
+        this.shader.setUniform1i("uTexture", 0)
+        this.shader.setUniform1i("uNormal", 1)
         
         if(node.texture_file != null) {
             this.shader.setUniform1i("has_tex",1)
+            if(node.normal_file != null) {
+                this.shader.setUniform1i("has_norm",1)
+            } else {
+                this.shader.setUniform1i("has_norm",0)
+            }
         } else {
             this.shader.setUniform1i("has_tex",0)
+            this.shader.setUniform1i("has_norm",0)
         }
 
         for(let index = 0; index < this.lights.length; index++) {

@@ -10,9 +10,12 @@ uniform vec3 Ks;
 uniform float Ns;
 uniform int num_lights;
 uniform int has_tex;
+uniform int has_norm;
 uniform int movelights;
 uniform mat4 u_transform;
-uniform sampler2D uSampler;
+
+uniform sampler2D uTexture;
+uniform sampler2D uNormalMap;
 
 struct lightSource
 {
@@ -27,6 +30,7 @@ in vec3 v_color;
 in vec3 v_normal;
 in highp vec2 vTextureCoord;
 in vec3 model_pos;
+in mat3 vTBN;
 // Final color
 out vec4 out_color;
 
@@ -34,7 +38,17 @@ void main() {
     vec3 lightDir;
     vec3 pos;
     vec3 texcolor;
-    vec3 normal = normalize(vec3(u_modelInverseTranspose*vec4(v_normal,1.0)));
+    vec3 normal;
+    if(has_norm == 1) {
+        normal = texture(uNormalMap, vTextureCoord).xyz;
+        normal = normal * 2.0 - 1.0;
+        normal = normalize(vTBN * normal);
+        // normal = -normal;
+        // normal = normalize(vec3(u_modelInverseTranspose*vec4(normal,1.0)));
+    } else {
+        normal = normalize(vec3(u_modelInverseTranspose*vec4(v_normal,1.0)));
+    }
+    // vec3 normal = normalize(vec3(u_modelInverseTranspose*vec4(v_normal,1.0)));
     vec3 cameraDir = normalize(u_cameraPosition - model_pos);
 
     vec3 ambient = Ka * Ia;
@@ -63,7 +77,7 @@ void main() {
         res = res + diffuse + specular;
     }
     if(has_tex == 1) {
-        texcolor = texture(uSampler, vTextureCoord).xyz;
+        texcolor = texture(uTexture, vTextureCoord).xyz;
         res = res * texcolor;
     } else {
         res = res * v_color;
