@@ -36,9 +36,9 @@
                     {
                         "name": "cube",
                         "type": "object",
-                        "obj": "../objects/cube_tex.obj",
-                        "texture": "../objects/concrete.jpg",
-                        "normal_map": "../objects/concrete_normal.jpg",
+                        "obj": "../objects/monkey_hp.obj",
+                        "texture": "../objects/wall.jpg",
+                        "normal_map": "../objects/wall_normal.jpg",
                         "color": "#33F0FF",
                         "translation": [0,0,0],
                         "rotation": [0,0,0],
