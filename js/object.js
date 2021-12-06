@@ -21,6 +21,8 @@ class ObjectNode extends SceneNode
         this.texture = null
         this.normal_file = normal
         this.normal_map = null
+        this.filtering = 0
+        this.old_filtering;
     }
 
     update( )
@@ -51,13 +53,13 @@ class ObjectNode extends SceneNode
     loadText( gl )
     {
         if(this.texture_file != null)
-            this.texture = loadTexture(gl, this.texture_file)
+            this.texture = loadTexture(gl, this.texture_file, this.filtering)
     }
 
     loadNorm( gl )
     {
         if(this.normal_file != null)
-            this.normal_map = loadTexture(gl, this.normal_file)
+            this.normal_map = loadTexture(gl, this.normal_file, this.filtering)
     }
 
     createBuffers( gl )
@@ -72,12 +74,13 @@ class ObjectNode extends SceneNode
         if ( this.vbo == null )
             this.createBuffers( gl )
         
-        if ( this.texture == null )
+        if ( this.texture == null || this.filtering != this.old_filtering)
             this.loadText( gl )
         
-        if ( this.normal_map == null )
+        if ( this.normal_map == null || this.filtering != this.old_filtering)
             this.loadNorm( gl )
         
+        this.old_filtering = this.filtering
         // let stride = (3*3 + 2 + 6) * 4,
         let stride = (3*3 + 2 + 6) * 4,
         offset = 0

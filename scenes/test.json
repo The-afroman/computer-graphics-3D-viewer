@@ -36,7 +36,7 @@
                     {
                         "name": "cube",
                         "type": "object",
-                        "obj": "../objects/monkey_hp.obj",
+                        "obj": "../objects/cube_tex.obj",
                         "texture": "../objects/concrete.jpg",
                         "normal_map": "../objects/concrete_normal.jpg",
                         "color": "#33F0FF",

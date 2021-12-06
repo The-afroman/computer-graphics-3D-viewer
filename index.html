@@ -13,26 +13,47 @@
         <div id="header-container">
             <div class="modes">
                 <h1>Assignment 5&nbsp;&nbsp;&nbsp;&nbsp; </h1>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                <div class="container2">
-                    <span>Select Ambient</span><br/>
-                    <input id="ambient" type="color" value="#ffffff">
-                    <span>Select Diffuse</span><br/>
-                    <input id="diffuse" type="color" value="#ffffff">
-                    <span>Select Specular</span><br/>
-                    <input id="specular" type="color" value="#ffffff">
+
+                <div class="container">
+                    <div class="color-el">
+                        <span>Select<br/>Ambient</span><br/>
+                        <input id="ambient" type="color" value="#ffffff">
+                    </div>
+                    <div class="color-el">
+                        <span>Select<br/>Diffuse</span><br/>
+                        <input id="diffuse" type="color" value="#ffffff">
+                    </div>
+                    <div class="color-el">
+                        <span>Select<br/>Specular</span><br/>
+                        <input id="specular" type="color" value="#ffffff">
+                    </div>
                 </div> 
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
                 <div class="container3">
                     <div id="active_light">no light selected</div>
                     <div id="tip">toggle lights with q</div>
                 </div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
                 <div class="container2">
                     <span>Pos or Dir</span><br/>
                     x:<input type="text" id="pos_x">
                     y:<input type="text" id="pos_y">
                     z:<input type="text" id="pos_z">
+                </div>
+
+                <div class="container">
+                    <div class="color-el">
+                        <span>Select<br/>Ka</span><br/>
+                        <input id="ka" type="color" value="#ffffff">
+                    </div>
+                    <div class="color-el">
+                        <span>Select<br/>Kd</span><br/>
+                        <input id="kd" type="color" value="#ffffff">
+                    </div>
+                    <div class="color-el">
+                        <span>Select<br/>Ks</span><br/>
+                        <input id="ks" type="color" value="#ffffff">
+                    </div>
                 </div>
             </div> 
                
@@ -69,14 +90,6 @@
                     <div id="phongShading" class="indicator inactive">[3] Phong</div>
                     <div id="gouraudShading" class="indicator inactive">[4] Gouraud</div>
                 </div>
-            </div>
-            <div class="container">
-                <span>Select Ka</span><br/>
-                <input id="ka" type="color" value="#ffffff">
-                <span>Select Kd</span><br/>
-                <input id="kd" type="color" value="#ffffff">
-                <span>Select Ks</span><br/>
-                <input id="ks" type="color" value="#ffffff">
             </div>
             
         </div>

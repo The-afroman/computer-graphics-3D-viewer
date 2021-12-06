@@ -44,7 +44,7 @@ class App
         this.initCamera()
 
         // movement
-        this.movement = new OrbitMovement( this, 1 )
+        this.movement = new OrbitMovement( this, 0.25 )
 
         // resize handling
         this.resizeToDisplay( )
@@ -52,6 +52,7 @@ class App
 
         // app state
         this.app_state = new AppState( this )
+        this.filtering = 0;
     }
 
     /**
@@ -201,6 +202,8 @@ class App
             }
         }
         if(node.type == "object") {
+            node.filtering = this.filtering
+            // console.log("filtering",this.filtering)
             this.shader.setUniform1f("Ns", node.Ns)
             this.shader.setUniform3f("Ka", node.Ka)
             this.shader.setUniform3f("Kd", node.Kd)

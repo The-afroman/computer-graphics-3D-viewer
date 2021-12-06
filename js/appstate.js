@@ -17,6 +17,7 @@ class AppState
         this.selected_light = app.lights[0]
         this.ambient_light = app.ambient_light
         this.move_lights = 0
+        this.filtering = 0
         // get list of ui indicators
         this.ui_categories = {
 
@@ -235,6 +236,11 @@ class AppState
         if ( Input.isKeyPressed( "l" ) ) {
             this.move_lights ^= 1
             this.app.shader.setUniform1i("movelights",this.move_lights)
+        }
+
+        if ( Input.isKeyPressed( "f" ) ) {
+            this.filtering ^= 1
+            this.app.filtering = this.filtering
         }
     }
 

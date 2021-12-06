@@ -82,6 +82,6 @@ void main() {
     } else {
         res = res * v_color;
     }
-
+    // out_color = vec4(normal, 1.0);
     out_color = vec4(res, 1.0);
 }

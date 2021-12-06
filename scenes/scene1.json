@@ -1,7 +1,7 @@
 {
     "camera": {
         "type": "perspective",
-        "position": [0,3,-7],
+        "position": [0,5,-7],
         "lookat": [0,0,0],
         "up": [0,1,0],
         "fov": 80
@@ -11,13 +11,19 @@
         "point_lights": [
             {
                 "type": "point",
-                "position": [0, 2, 0],
+                "position": [0, 2, -5],
                 "Id": [0.5, 0.5, 0.8],
                 "Is": [1, 1, 1]
             },
             {
                 "type": "point",
-                "position": [0, 0.5, -1],
+                "position": [0, 5, 0],
+                "Id": [0.3, 0.4, 0.3],
+                "Is": [1, 1, 1]
+            },
+            {
+                "type": "point",
+                "position": [5,2.5,1],
                 "Id": [0.3, 0.4, 0.3],
                 "Is": [1, 1, 1]
             }
@@ -46,7 +52,9 @@
                 "translation": [0,-1.0,0],
                 "rotation": [0,0,0],
                 "scale": [25,25,25],
-                "children": []
+                "children": [],
+                "texture": "../objects/tile.jpg",
+                "normal_map": "../objects/tile_normal.jpg"
             },
             {
                 "name": "node1",
@@ -60,60 +68,125 @@
                         "type": "object",
                         "obj": "../objects/cube_tex.obj",
                         "color": "#33F0FF",
-                        "translation": [-5,-0.2,-1.2],
+                        "translation": [-5,0,-1.2],
                         "rotation": [0,0,0],
-                        "scale": [0.8,0.8,0.8],
+                        "scale": [1,1,1],
                         "children": [],
-                        "texture": "../objects/concrete.jpg",
-                        "normal_map": "../objects/concrete_normal.jpg"
+                        "texture": "../objects/wall.jpg",
+                        "normal_map": "../objects/wall_normal.jpg"
+                        
                     },
                     {
-                        "name": "pyramid",
+                        "name": "cube",
                         "type": "object",
-                        "obj": "../objects/pyramid.obj",
-                        "color": "#fcba03",
-                        "translation": [-0.5,0,-0.8],
+                        "obj": "../objects/cube_tex.obj",
+                        "color": "#33F0FF",
+                        "translation": [-5,0,-4.2],
                         "rotation": [0,0,0],
                         "scale": [1,1,1],
                         "children": []
+                        
                     },
                     {
                         "name": "prism",
                         "type": "object",
                         "obj": "../objects/prism.obj",
                         "color": "#ab0eab",
-                        "translation": [-4,0,1.5],
+                        "translation": [-5.5,2,-4],
                         "rotation": [0,-60,0],
                         "scale": [1,1,1],
                         "children": []
                     },
                     {
-                        "name": "table",
+                        "name": "sphere",
                         "type": "object",
-                        "obj": "../objects/table.obj",
+                        "obj": "../objects/sphere.obj",
                         "color": "#523f38",
-                        "translation": [1.8,-1,-3.5],
+                        "translation": [-4,2,-4.5],
                         "rotation": [0,-30,0],
-                        "scale": [0.7,0.7,0.7],
+                        "scale": [1,1,1],
                         "children": []
+                    },
+                    {
+                        "name": "teddy",
+                        "type": "object",
+                        "obj": "../objects/teddy.obj",
+                        "color": "#33F0FF",
+                        "translation": [0,2,-3.5],
+                        "rotation": [-110,180,0],
+                        "scale": [3,3,3],
+                        "children": [],
+                        "texture": "../objects/teddy.jpg",
+                        "normal_map": "../objects/teddy_normal.jpg"
+                        
+                    },
+                    {
+                        "name": "statue of liberty",
+                        "type": "object",
+                        "obj": "../objects/statue_of_liberty.obj",
+                        "color": "#33F0FF",
+                        "translation": [4,-1,-3],
+                        "rotation": [0,-90,0],
+                        "scale": [3,3,3],
+                        "children": [],
+                        "texture": "../objects/bronze.bmp",
+                        "normal_map": "../objects/bronze_normal.jpg"
+                        
+                    },
+                    {
+                        "name": "phonebooth",
+                        "type": "object",
+                        "obj": "../objects/phonestand.obj",
+                        "color": "#fcba03",
+                        "translation": [-0.5,2.5,-0.8],
+                        "rotation": [0,0,0],
+                        "scale": [0.6,0.6,0.6],
+                        "children": [],
+                        "texture": "../objects/phonestand.jpg",
+                        "normal_map": "../objects/phonestand_normal.jpg"
+                    },
+                    {
+                        "name": "prism",
+                        "type": "object",
+                        "obj": "../objects/prism.obj",
+                        "color": "#ab0eab",
+                        "translation": [-5.5,2,-1],
+                        "rotation": [0,-60,0],
+                        "scale": [1,1,1],
+                        "children": [],
+                        "texture": "../objects/tarp.jpg",
+                        "normal_map": "../objects/tarp_normal.jpg"
+                    },
+                    {
+                        "name": "sphere",
+                        "type": "object",
+                        "obj": "../objects/sphere.obj",
+                        "color": "#523f38",
+                        "translation": [-4,2,-1.5],
+                        "rotation": [0,-30,0],
+                        "scale": [1,1,1],
+                        "children": [],
+                        "texture": "../objects/thatch.jpg",
+                        "normal_map": "../objects/thatch_normal.jpg"
                     },
                     {
                         "name": "teapot",
                         "type": "object",
                         "obj": "../objects/teapot.obj",
                         "color": "#1ea896",
-                        "translation": [2,0.2,-3.5],
+                        "translation": [5,2.35,2],
                         "rotation": [0,-120,0],
                         "scale": [1.5,1.5,1.5],
                         "children": [],
-                        "texture": "../objects/wood.jpg"
+                        "texture": "../objects/gold_metal.jpg",
+                        "normal_map": "../objects/gold_metal_normal.jpg"
                     },
                     {
-                        "name": "monkey",
+                        "name": "cylinder",
                         "type": "object",
-                        "obj": "../objects/monkey_hp.obj",
+                        "obj": "../objects/cylinder.obj",
                         "color": "#1ea896",
-                        "translation": [-3,0.5,-3.5],
+                        "translation": [5,0.5,2],
                         "rotation": [0,120,0],
                         "scale": [1.5,1.5,1.5],
                         "children": [],

@@ -2,6 +2,11 @@
     font-family: monospace;
 }
 
+input[type="text"] {
+    height: 1em;
+    width: 2em;
+}
+
 html, body {
     height: 100%;
     margin: 0;
@@ -9,7 +14,7 @@ html, body {
 }
 
 header {
-    background-color: yellow;
+    background-color: rgb(255, 230, 0);
 }
 
 #header-container {
@@ -20,7 +25,7 @@ header {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #ffecc2;
+    background-color: #c4fff7;
 }
 
 #webgl-container {
@@ -29,12 +34,12 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
 }
 
 #canvas {
-    width: 70vw;
-    height: calc(70*0.56vw);
+    height: calc(65*0.56vw);
+    max-width: calc(65vh/0.56);
+    max-height: 65vh;
     background-color: white;
 }
 
@@ -59,6 +64,9 @@ h3 {
 .modes {
     display: flex;
     flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .indicator {
@@ -71,10 +79,10 @@ h3 {
 }
 
 .container {
-    position: relative;
-    padding: 10px;
-    margin: 5px;
-    width: 90px;
+    display: flex;
+    /* padding: 10px; */
+    /* margin: 5px; */
+    /* width: 90px; */
     text-align: center;
     border-radius: 2px;
 }
@@ -86,6 +94,10 @@ h3 {
     width: 10px;
     text-align: center;
     border-radius: 2px;
+}
+
+.color-el {
+    width: 6em;
 }
 
 .container:hover {

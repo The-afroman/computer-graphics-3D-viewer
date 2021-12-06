@@ -13,7 +13,7 @@ function isPowerOf2(value){
 }
 
 // Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
-function loadTexture(gl, url) {
+function loadTexture(gl, url, filter = 0) {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
   
@@ -43,16 +43,20 @@ function loadTexture(gl, url) {
       // WebGL1 has different requirements for power of 2 images
       // vs non power of 2 images so check if the image is a
       // power of 2 in both dimensions.
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+    //   if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
          // Yes, it's a power of 2. Generate mips.
-         gl.generateMipmap(gl.TEXTURE_2D);
-      } else {
+        //  gl.generateMipmap(gl.TEXTURE_2D);
+    //   } else {
          // No, it's not a power of 2. Turn off mips and set
          // wrapping to clamp to edge
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      }
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+         if(filter == "nearest") {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+         } else {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+         }
+    //   }
     };
     image.src = url;
   
@@ -198,8 +202,10 @@ function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
 
     let tangents = []
     let bitangents = []
-    
-    for (let i = 0; i < vertex_ids.length/3; i+=3) {
+    // if(vertices.length > vertex_ids.length) {
+
+    // }
+    for (let i = 0; i < vertex_ids.length; i+=3) {
         const vid = ( vertex_ids[ i ] * 3 )
         const vid1 = ( vertex_ids[ i+1 ] * 3 )
         const vid2 = ( vertex_ids[ i+2 ] * 3 )
