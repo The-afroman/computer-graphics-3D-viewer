@@ -53,7 +53,8 @@ class AppState
             "filtering":
             {
                 "linear": document.getElementById( "linear" ),
-                "nearest": document.getElementById( "nearest" )
+                "nearest": document.getElementById( "nearest" ),
+                "minimap": document.getElementById( "minimap" )
             }
 
         }
@@ -245,12 +246,15 @@ class AppState
         }
 
         if ( Input.isKeyPressed( "f" ) ) {
-            this.filtering ^= 1
+            this.filtering += 1
+            this.filtering %= 3
             this.app.filtering = this.filtering
             if(this.filtering==1) {
                 this.updateUI("filtering", "nearest")
-            } else {
+            } else if(this.filtering==0) {
                 this.updateUI("filtering", "linear")
+            } else {
+                this.updateUI("filtering", "minimap")
             }
         }
     }

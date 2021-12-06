@@ -166,7 +166,8 @@ class App
             mat4.create( ),
             this.camera.vp( ),
             node.getTransform( ) )
-
+        
+        // set uniforms
         let invTransposeModel = mat4.invert(mat4.create(),mat4.transpose(mat4.create, node.getTransform( )));
         this.shader.setUniform4x4f( "u_model", node.getTransform( ) );
         this.shader.setUniform4x4f( "u_modelInverseTranspose", invTransposeModel );
@@ -178,7 +179,6 @@ class App
         this.shader.setUniform4x4f( "u_transform",this.scene.transform);
         this.shader.setUniform1i("uTexture", 0)
         this.shader.setUniform1i("uNormal", 1)
-        
         if(node.texture_file != null) {
             this.shader.setUniform1i("has_tex",1)
             if(node.normal_file != null) {
@@ -190,7 +190,6 @@ class App
             this.shader.setUniform1i("has_tex",0)
             this.shader.setUniform1i("has_norm",0)
         }
-
         for(let index = 0; index < this.lights.length; index++) {
             this.shader.setUniform3f(`lights[${index}].pos_or_direction`, vec3.fromValues(this.lights[index].position[0],this.lights[index].position[1],this.lights[index].position[2]));
             this.shader.setUniform3f(`lights[${index}].Id`, vec3.fromValues(this.lights[index].diffuse[0],this.lights[index].diffuse[1],this.lights[index].diffuse[2]));
@@ -203,7 +202,6 @@ class App
         }
         if(node.type == "object") {
             node.filtering = this.filtering
-            // console.log("filtering",this.filtering)
             this.shader.setUniform1f("Ns", node.Ns)
             this.shader.setUniform3f("Ka", node.Ka)
             this.shader.setUniform3f("Kd", node.Kd)

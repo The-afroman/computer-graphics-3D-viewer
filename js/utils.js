@@ -13,6 +13,13 @@ function isPowerOf2(value){
 }
 
 // Function borrowed from: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+/**
+ * Clamps a number between two numbers
+ * @param { WebGL2RenderingContext } gl The webgl context
+ * @param { String } url image src
+ * @param { Int } filter texture filtering to use 0 = linear, 1 = nearesr, 2 = minimap (if pow of 2)
+ * @returns { WebGLTexture } the loaded texture
+ */
 function loadTexture(gl, url, filter = 0) {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -49,12 +56,22 @@ function loadTexture(gl, url, filter = 0) {
     //   } else {
          // No, it's not a power of 2. Turn off mips and set
          // wrapping to clamp to edge
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
          if(filter == 1) {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-         } else {
+         } else if(filter == 0){
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+         } else {
+            if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+               gl.generateMipmap(gl.TEXTURE_2D);
+            } else {
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            }
          }
     //   }
     };
@@ -196,15 +213,19 @@ function parseMTL( entry, material ) {
     console.log(material)
 }
 
-// function borrowed from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
+// function adapted from https://observablehq.com/@davidbauer/normal-mapping?collection=@davidbauer/ecs175
+/**
+ * Clamps a number between two numbers
+ * @param { Array.<Number> } vertices object verticies
+ * @param { Array.<Number> } uvs object texcoordinates
+ * @param { Array.<Number> } vertex_ids object vertex ids
+ * @param { Array.<Number> } tex_ids object texcoordinate ids
+ * @returns { [Array.<Number> Array.<Number>] } tangent and bitangent arrays
+ */
 function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
 {
-
     let tangents = []
     let bitangents = []
-    // if(vertices.length > vertex_ids.length) {
-
-    // }
     for (let i = 0; i < vertex_ids.length; i+=3) {
         const vid = ( vertex_ids[ i ] * 3 )
         const vid1 = ( vertex_ids[ i+1 ] * 3 )
@@ -257,28 +278,7 @@ function calculateTangentSpace(vertices, uvs, vertex_ids, tex_ids)
             bitangents.push(bitangent[1])
             bitangents.push(bitangent[2])
         }
-        // tangents[vid] = tangent[0]
-        // tangents[vid+1] = tangent[1]
-        // tangents[vid+2] = tangent[2]
-        // bitangents[vid] = bitangent[0]
-        // bitangents[vid+1] = bitangent[1]
-        // bitangents[vid+2] = bitangent[2]
-
-        // tangents[vid1] = tangent[0]
-        // tangents[vid1+1] = tangent[1]
-        // tangents[vid1+2] = tangent[2]
-        // bitangents[vid1] = bitangent[0]
-        // bitangents[vid1+1] = bitangent[1]
-        // bitangents[vid1+2] = bitangent[2]
-
-        // tangents[vid2] = tangent[0]
-        // tangents[vid2+1] = tangent[1]
-        // tangents[vid2+2] = tangent[2]
-        // bitangents[vid2] = bitangent[0]
-        // bitangents[vid2+1] = bitangent[1]
-        // bitangents[vid2+2] = bitangent[2]
     }
-  
     return [tangents, bitangents]
   }
 
