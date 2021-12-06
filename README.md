@@ -1,7 +1,7 @@
 # Assignment 5 ecs 175
 
-![screenshot1!](./pictures/sc3.png)
-![screenshot2!](./pictures/sc4.png)
+![screenshot3!](./pictures/sc3.png)
+![screenshot4!](./pictures/sc4.png)
 ![screenshot1!](./pictures/sc1.png)
 ![screenshot2!](./pictures/sc2.png)
 
