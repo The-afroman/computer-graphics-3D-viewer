@@ -1,0 +1,7 @@
+newmtl Solid
+Ka 0.6 0.6 0.6
+Kd 0.5 0.5 0.5
+Ks 1.0 1.0 1.0
+d 1.0
+Ns 12
+illum 0
