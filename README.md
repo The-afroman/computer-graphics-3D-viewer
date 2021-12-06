@@ -11,8 +11,8 @@ number keys change shader
 **r** for ray cast mode  
 **q** to cycle through lights  
 **p** and o change projection  
-use **l** to toggle translation of lights with scene
-use **f** to switch between texture filtering methods
+use **l** to toggle translation of lights with scene  
+use **f** to switch between texture filtering methods  
 
 #### standard controls:
 
