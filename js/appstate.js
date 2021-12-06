@@ -49,6 +49,11 @@ class AppState
                 "flat": document.getElementById( "flatShading" ),
                 "phong": document.getElementById( "phongShading" ),
                 "gouraud": document.getElementById( "gouraudShading" )
+            },
+            "filtering":
+            {
+                "linear": document.getElementById( "linear" ),
+                "nearest": document.getElementById( "nearest" )
             }
 
         }
@@ -58,6 +63,7 @@ class AppState
         this.updateUI( "shading", "phong" )
         this.updateUI( "projection_mode", "perspective" )
         this.updateUI( "selection", "target" )
+        this.updateUI("filtering", "linear")
         // light picker elements
         this.ia_pick = document.getElementById("ambient")
         this.id_pick = document.getElementById("diffuse")
@@ -241,6 +247,11 @@ class AppState
         if ( Input.isKeyPressed( "f" ) ) {
             this.filtering ^= 1
             this.app.filtering = this.filtering
+            if(this.filtering==1) {
+                this.updateUI("filtering", "nearest")
+            } else {
+                this.updateUI("filtering", "linear")
+            }
         }
     }
 
