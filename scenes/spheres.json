@@ -47,7 +47,7 @@
             {
                 "name": "sphere8",
                 "type": "object",
-                "obj": "../objects/sphere8.obj",
+                "obj": "objects/sphere8.obj",
                 "color": "#AAAAAA",
                 "translation": [1,0,0],
                 "rotation": [0,0,0],
@@ -57,7 +57,7 @@
             {
                 "name": "sphere3",
                 "type": "object",
-                "obj": "../objects/sphere3.obj",
+                "obj": "objects/sphere3.obj",
                 "color": "#AAAAAA",
                 "translation": [-1,0,0],
                 "rotation": [0,0,0],
