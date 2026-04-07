@@ -190,7 +190,7 @@ function loadExternalFile( url )
 function parseMTL( entry, material ) {
     const elements = entry.split( ' ' )
     console.log(elements)
-    let raw = loadExternalFile("../objects/"+elements[1])
+    let raw = loadExternalFile("objects/"+elements[1])
     let Ka, Kd, Ks, Ns
     for ( let line of raw.split( '\n' ) ) {
         switch(line.split( ' ' )[ 0 ]) {
