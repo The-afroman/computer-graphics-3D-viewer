@@ -501,7 +501,7 @@ function loadSceneFile( url )
     let raw = loadExternalFile( url )
 
     let scene_description = JSON.parse( raw )
-    print(scene_description)
+    console.log(scene_description)
 
     return {
 
